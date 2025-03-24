@@ -16,7 +16,8 @@ struct Droite {
     int votes;
 };
 
-Droite transformeeDeHough(const Image& img);
+// Fonction de transformée de Hough, maintenant retourne un vecteur de Droites
+std::vector<Droite> transformeeDeHough(const Image& img);
 
 
 #endif /* hough_hpp */
