@@ -5,9 +5,19 @@
 //  Created by Inès Veigneau on 24/03/2025.
 //
 
-#ifndef ppm_image_hpp
-#define ppm_image_hpp
+#ifndef PPM_IMAGE_H
+#define PPM_IMAGE_H
 
-#include <stdio.h>
+#include <vector>
+#include <string>
 
-#endif /* ppm_image_hpp */
+class PPMImage {
+public:
+    int width, height;
+    std::vector<std::vector<int>> grayscaleImage;  // Stockage des niveaux de gris
+
+    explicit PPMImage(const std::string& filename);
+    void saveAsPGM(const std::string& outputFilename) const;
+};
+
+#endif
