@@ -11,9 +11,12 @@
 #include "image.hpp"
 #include <vector>
 
+// Structure modifiée pour stocker les droites verticales
 struct Droite {
-    double m, b;
+    double m;  // Pente (utile pour les droites non verticales)
+    double b;  // Ordonnée à l'origine (utile pour les droites non verticales)
     int votes;
+    bool verticale;  // Flag pour indiquer si la droite est verticale
 };
 
 // Fonction de transformée de Hough, maintenant retourne un vecteur de Droites

@@ -5,17 +5,37 @@
 //  Created by Inès Veigneau on 24/03/2025.
 //
 
-#include "hough.hpp"
-#include <map>
 #include <iostream>
+#include "image.hpp"
+#include "hough.hpp"
 #include <cmath>
+#include <map>
+#include <vector>
 
-#define SEUIL_BORD 100  // Seuil pour considérer un pixel comme un bord
+#define SEUIL_BORD 128  // Seuil pour considérer un pixel comme un bord
 
+
+
+// Fonction de transformation de Hough modifiée pour gérer les droites verticales
 std::vector<Droite> transformeeDeHough(const Image& img) {
     std::map<double, std::map<double, int>> accumulateur;
+    std::vector<Droite> droitesInteressantes;
 
-    // Parcourir chaque pixel de l'image
+    // Détection des droites verticales (basé sur les colonnes)
+    for (int x = 0; x < img.largeur; ++x) {
+        int votes = 0;
+        for (int y = 0; y < img.hauteur; ++y) {
+            if (img.pixels[y][x] < SEUIL_BORD) { // Pixel détecté comme un bord
+                votes++;
+            }
+        }
+        if (votes > 5) {  // Seuil pour considérer une droite verticale
+            Droite verticale = {0, static_cast<double>(x), votes, true};
+            droitesInteressantes.push_back(verticale);
+        }
+    }
+
+    // Détection des droites inclinées
     for (int y = 0; y < img.hauteur; ++y) {
         for (int x = 0; x < img.largeur; ++x) {
             if (img.pixels[y][x] < SEUIL_BORD) { // Pixel détecté comme un bord
@@ -27,13 +47,8 @@ std::vector<Droite> transformeeDeHough(const Image& img) {
         }
     }
 
-    // Définir un seuil pour les votes
-    int seuilVotes = 5; // Par exemple, récupérer toutes les droites avec plus de 5 votes
-
-    // Liste pour stocker toutes les droites détectées
-    std::vector<Droite> droitesInteressantes;
-
-    // Trouver toutes les droites ayant reçu un nombre de votes supérieur au seuil
+    // Filtrage des droites par le nombre de votes
+    int seuilVotes = 2; // Seuil pour les votes des droites
     for (const auto& pairM : accumulateur) {
         for (const auto& pairB : pairM.second) {
             if (pairB.second > seuilVotes) { // Vérifie si le nombre de votes dépasse le seuil
@@ -43,12 +58,7 @@ std::vector<Droite> transformeeDeHough(const Image& img) {
         }
     }
 
-    // Affichage des droites intéressantes
-    std::cout << "Droites détectées (avec plus de " << seuilVotes << " votes) :" << std::endl;
-    for (const auto& droite : droitesInteressantes) {
-        std::cout << "y = " << droite.m << " * x + " << droite.b << " avec "
-                  << droite.votes << " votes." << std::endl;
-    }
-
     return droitesInteressantes; // Retourner la liste des droites détectées
 }
+
+
