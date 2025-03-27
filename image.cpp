@@ -63,7 +63,7 @@ Image lireImagePPM(const std::string& fichierPPM) {
     
 
     /// Conversion en niveau de gris
-    Image img = { largeur, hauteur, std::vector<std::vector<int>>(hauteur, std::vector<int>(largeur)) };
+    Image img = {largeur, hauteur, std::vector<std::vector<int>>(hauteur, std::vector<int>(largeur)) };
     for (int y = 0; y < hauteur; ++y) {
         for (int x = 0; x < largeur; ++x) {
             Pixel p;

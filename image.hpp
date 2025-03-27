@@ -23,7 +23,8 @@ struct Pixel {
 
 
 struct Image {
-    int largeur, hauteur;
+    int largeur;
+    int hauteur;
     std::vector<std::vector<int>> pixels;  /// Stockage en niveaux de gris
 };
 

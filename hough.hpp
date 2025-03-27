@@ -14,8 +14,8 @@
 
 
 struct Droite {
-    double m;  /// Pente
-    double b;  /// Ordonnée à l'origine
+    double m;  /// (Pente)
+    double b;  /// (Ordonnée à l'origine)
     int votes;
     bool verticale;  /// Indique si la droite est verticale
 };
