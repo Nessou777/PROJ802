@@ -37,5 +37,6 @@ void afficherHoughASCII(const Image& img, const std::vector<Droite>& droites);
 void afficherHoughASCIIPolaire(const Image& img, const std::vector<Droite>& droites);
 
 void tracerDroites(const Image& img, const std::vector<Droite>& droites, const std::string& fichierSortie);
+void tracerDroitesPolaire(const Image& img, const std::vector<Droite>& droites, const std::string& fichierSortie);
 
 #endif /* hough_hpp */

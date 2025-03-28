@@ -15,8 +15,8 @@
 #include <vector>
 #define PI 3.141592653589793
 #define SEUIL_BORD 250  /// Seuil pour considérer un pixel comme un bord
-#define SEUIL_VOTES_CARTESIEN 5 /// Seuil pour filtrer les droites dans Hough Naive
-#define SEUIL_VOTES_POLAIRE 7 /// Seuil pour filtrer les droites dans Hough moins naive
+#define SEUIL_VOTES_CARTESIEN 9 /// Seuil pour filtrer les droites dans Hough Naive
+#define SEUIL_VOTES_POLAIRE 10 /// Seuil pour filtrer les droites dans Hough moins naive
 
 
 
@@ -68,14 +68,7 @@ std::vector<Droite> supprimerDroitesProches(std::vector<Droite> droites, int tol
 std::vector<Droite> transformeeDeHough(const Image& img) {
     std::map<int, std::map<int, int>> accumulateur;
     std::vector<Droite> droites;
-
-    /// Détection des droites verticales
-    for (int x = 0; x < img.largeur; ++x) {
-        int votes = 0;
-        for (int y = 0; y < img.hauteur; ++y) {
-            if (img.pixels[y][x] > SEUIL_BORD) votes++;
-        }
-    }
+    
     /// Détection des droites
     for (int y = 0; y < img.hauteur; ++y) {
         for (int x = 0; x < img.largeur; ++x) {
@@ -87,6 +80,7 @@ std::vector<Droite> transformeeDeHough(const Image& img) {
             }
         }
     }
+    
     /// Filtrage des droites les plus pertinentes
     for (const auto& m : accumulateur) { /// clé principale m (pente multipliée par 10).
         for (const auto& b : m.second) { /// std::map<int, int> associée, qui contient toutes les valeurs de b.
@@ -238,6 +232,22 @@ void tracerDroites(const Image& img, const std::vector<Droite>& droites, const s
     sauvegarderImagePPM(fichierSortie, image_droites);
 }
 
+void tracerDroitesPolaire(const Image& img, const std::vector<Droite>& droites, const std::string& fichierSortie) {
+    Image image_droites = img;
+
+    /// Parcours des pixels et dessin des droites détectées
+    for (const auto& droite : droites) {
+        for (int x = 0; x < img.largeur; ++x) {
+            int y = static_cast<int>(-x * std::cos(droite.m)/std::sin(droite.m) + droite.b/std::sin(droite.m));
+            if (y >= 0 && y < img.hauteur) {
+                image_droites.pixels[y][x] = 128;
+            }
+        }
+    }
+
+    sauvegarderImagePPM(fichierSortie, image_droites);
+}
+
 
 
 
@@ -279,7 +289,6 @@ std::tuple<int, int, int, int> CohenSutherland(int x0, int y0, int x1, int y1, c
     int code1 = obtenirCode(x1, y1, image);
     int x;
     int y;
-    bool accept = false;
 
     
     if (code0 == 0 && code1 == 0) {

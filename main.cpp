@@ -18,7 +18,7 @@ int main() {
 
     try {
         /// Lecture de l'image
-        Image image = lireImagePPM("/Users/inesveigneau/Documents/Cours/Fac/M1/projet802/PROJ802/Projet/Projet/imageAvecUnSegment.ppm");
+        Image image = lireImagePPM("/Users/inesveigneau/Documents/Cours/Fac/M1/projet802/PROJ802/Projet/Projet/img2-a.ppm");
 
         
         
@@ -38,7 +38,7 @@ int main() {
 
         /// Sauvegarde de l'image en niveaux de gris
         sauvegarderImagePPM("resultat_NvGris.ppm", image);
-        tracerDroites(image, droites, "image_avec_droites.ppm");
+        tracerDroites(image, droites, "imageNaïve.ppm");
             
             
         /// Appel de la transformée de Hough - coordonnées polaires
@@ -46,7 +46,7 @@ int main() {
         std::cout << "\nDroites détectées :" << std::endl;
         std::vector<Droite> droitesHough = transformeeDeHoughPolaire(image);
         afficherHoughASCIIPolaire(image, droitesHough);
-        tracerDroites(image, droites, "finalHoughPolaire.ppm");
+        tracerDroitesPolaire(image, droitesHough, "imagePolaire.ppm");
 
         
     } catch (const std::exception& e) {
